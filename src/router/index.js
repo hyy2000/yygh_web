@@ -51,8 +51,38 @@ export const constantRoutes = [
       path: 'dashboard',
       name: 'Dashboard',
       component: () => import('@/views/dashboard/index'),
-      meta: { title: 'Dashboard', icon: 'dashboard' }
+      meta: { title: '尚医通后台系统', icon: 'dashboard' }
     }]
+  },
+
+  //医院设置管理的一组路由
+  {
+    path: '/hospitalset', //一级路由的路径 类上的路径
+    component: Layout, //布局
+    redirect: '/hospitalset/list', //重定向 
+    name: 'hospitalset',
+    meta: { title: '医院设置管理', icon: 'el-icon-s-help' },  //路由上显示的名称
+    children: [
+      {
+        path: 'list', //二级路由的路径
+        name: 'HospitalSetList',
+        component: () => import('@/views/yygh/hospitalset/list'),
+        meta: { title: '医院设置列表', icon: 'table' }
+      },
+      {
+        path: 'form',
+        name: 'HospitalSeForm',
+        component: () => import('@/views/yygh/hospitalset/form'),
+        meta: { title: '添加医院设置', icon: 'el-icon-plus' }
+      },
+      {
+        path: 'edit/:id',
+        name: 'HospitalSetEdit',
+        component: () => import('@/views/yygh/hospitalset/form'),
+        meta: { title: '编辑医院设置', noCache: true },
+        hidden:true
+      }
+    ]
   },
 
   {
@@ -77,18 +107,7 @@ export const constantRoutes = [
     ]
   },
 
-  {
-    path: '/form',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        name: 'Form',
-        component: () => import('@/views/form/index'),
-        meta: { title: 'Form', icon: 'form' }
-      }
-    ]
-  },
+
 
   {
     path: '/nested',
