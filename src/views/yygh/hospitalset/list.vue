@@ -1,10 +1,8 @@
 <template>
   <div class="app-container">
+    <!-- {{multipleSelection}} -->
     <!-- 查询表单 -->
-    
     <el-form :inline="true" :model="searchObj" class="demo-form-inline">
-
-      
       <el-form-item label="医院名称">
         <el-input v-model="searchObj.hosname" placeholder="医院名称"></el-input>
       </el-form-item>
@@ -12,8 +10,9 @@
         <el-input v-model="searchObj.hoscode" placeholder="医院编号"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="fetchData()">查询</el-button>
-        <el-button type="primary" @click="restData()">清空</el-button>
+        <el-button type="success" @click="fetchData()">查询</el-button>
+        <el-button type="info" @click="restData()">清空</el-button>
+        <el-button type="danger" @click="batchRemove()">批量删除</el-button>
       </el-form-item>
     </el-form>
 
@@ -24,7 +23,9 @@
       border
       fit
       highlight-current-row
+      @selection-change="handleSelectionChange"
     >
+      <el-table-column type="selection" width="50"> </el-table-column>
       <el-table-column label="序号" width="70" align="center">
         <template slot-scope="scope">
           {{ (page - 1) * limit + scope.$index + 1 }}
@@ -91,12 +92,32 @@ export default {
       page: 3,
       limit: 5,
       searchObj: {},
+      // ids: [],
+      multipleSelection: [],
     };
   },
   methods: {
+    //多选数组
+    handleSelectionChange(val) {
+      this.multipleSelection = val;
+    },
     //批量删除
-    batchRemove(ids) {
-      hospset.removeByIds(ids).then((resp) => {});
+    batchRemove() {
+      if (this.multipleSelection.length === 0) {
+        this.$message({
+          type: "info",
+          message: "请至少选择一行要删除的数据",
+        });
+        return;
+      } else {
+        let ids = []
+        for(var i=0;i<this.multipleSelection.length;i++){
+          ids.push(this.multipleSelection[i].id)
+        }
+        hospset.removeByIds(ids).then((resp) => {
+          this.fetchData()
+        });
+      }
     },
     removeDataById(id) {
       this.$confirm("此操作将删除该数据，是否继续？", "提示", {
@@ -125,11 +146,13 @@ export default {
           });
         });
     },
+    //分页limit改变
     handleSizeChange(val) {
       // console.log(`每页 ${val} 条`);
       this.limit = val;
       this.fetchData();
     },
+    //分页当前页page改变
     handleCurrentChange(val) {
       // console.log(`当前页: ${val}`);
       this.page = val;

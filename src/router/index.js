@@ -84,6 +84,24 @@ export const constantRoutes = [
       }
     ]
   },
+  //数据字典管理路由
+  {
+    path: '/cmn', //一级路由的路径 类上的路径
+    component: Layout, //布局
+    redirect: '/cmn/list', //重定向 
+    name: 'hospitalset',
+    meta: { title: '数据字典管理', icon: 'el-icon-s-help' },  //路由上显示的名称
+    alwaysShow:true,
+    children: [
+      {
+        path: 'list', //二级路由的路径
+        name: '数据字典',
+        component: () => import('@/views/yygh/cmn/list'),
+        meta: { title: '数据字典列表', icon: 'table' }
+      },
+      
+    ]
+  },
 
   {
     path: '/example',
