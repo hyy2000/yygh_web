@@ -3,7 +3,7 @@
     <el-button icon="el-icon-upload" type="success" @click="importData()"
       >导入数据</el-button
     >
-    <el-button icon="el-icon-download" type="success">导出数据</el-button>
+    <el-button icon="el-icon-download" type="success" @click="exportData()">导出数据</el-button>
 
     <el-table
       :data="list"
@@ -73,6 +73,9 @@ export default {
     };
   },
   methods: {
+    exportData(){
+      location.href='http://localhost:8202/admin/cmn/exportData'
+    },
     successHandler(){
         this.dialogVisible=false
         this.getDictList(1)
